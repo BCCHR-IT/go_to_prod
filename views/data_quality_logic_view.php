@@ -27,9 +27,6 @@ require  '../classes/messages.php';
     <div >
         <table id="data_quality_logic_data_table" class=" display " width="100%" cellspacing="0"></table>
     </div>
-    <div class="modal-footer">
-        <button type="button" class="btn btn-default" data-dismiss="modal"><?php echo lang('CLOSE')?> </button>
-    </div>
 </div>
 
 <script>
@@ -49,7 +46,7 @@ require  '../classes/messages.php';
                 { title: "Quality Rule Name" },
                 { title: "Real Time Executed?" },
                 { title: "Missing Variable" },
-                { title: "Edit" }
+                { title: "Edit (Will open a new window)" }
             ],
 
             "columnDefs": [

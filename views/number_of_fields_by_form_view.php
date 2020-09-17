@@ -25,9 +25,6 @@ require  '../classes/messages.php';
     <div style="padding: 1px">
         <table id="number_of_fields_by_form" class=" display " width="100%" cellspacing="0"></table>
     </div>
-    <div class="modal-footer">
-        <button type="button" class="btn btn-default" data-dismiss="modal"><?php echo lang('CLOSE')?></button>
-    </div>
 </div>
 
 <script>

@@ -24,9 +24,6 @@ require  '../classes/messages.php';
     <div >
         <table id="presence_of_calculated_variables_data_table" class=" display " width="100%" cellspacing="0"></table>
     </div>
-    <div class="modal-footer">
-        <button type="button" class="btn btn-default" data-dismiss="modal"><?php echo lang('CLOSE')?></button>
-    </div>
 </div>
 
 <script>

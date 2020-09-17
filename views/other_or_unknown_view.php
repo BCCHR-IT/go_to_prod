@@ -26,11 +26,6 @@ require  '../classes/messages.php';
     <!-- Table -->
     <table id="other_or_unknown_data_table" class=" display " width="100%" cellspacing="0"></table>
     </div>
-    <div class="modal-footer">
-        <button type="button" class="btn btn-default" data-dismiss="modal"><?php echo lang('CLOSE')?></button>
-
-    </div>
-
 </div>
 
 
@@ -54,7 +49,7 @@ require  '../classes/messages.php';
                 { title: "Variable / Field Name" },
                 { title: "Field Label" },
                 { title: "Options/Choices" },
-                { title: "Edit" }
+                { title: "Edit (Will open a new window)" }
             ],
 
             "columnDefs": [

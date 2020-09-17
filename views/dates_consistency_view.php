@@ -30,9 +30,6 @@ require  '../classes/messages.php';
     <div style="padding: 1px">
         <table id="is_date_consistent_data_table" class=" display " width="100%" cellspacing="0"></table>
     </div>
-    <div class="modal-footer">
-        <button type="button" class="btn btn-default" data-dismiss="modal"><?php echo lang('CLOSE')?></button>
-    </div>
 </div>
 
 <script>
@@ -54,7 +51,7 @@ require  '../classes/messages.php';
                 { title: "Variable / Field Name" },
                 { title: "Field Label" },
                 { title: "Date Format" },
-                { title: "Edit" }
+                { title: "Edit (Will open a new window)" }
             ],
 
             "columnDefs": [

@@ -24,9 +24,6 @@ require  '../classes/messages.php';
     <div >
         <table id="today_exist_in_calculations_data_table" class=" display " width="100%" cellspacing="0"></table>
     </div>
-    <div class="modal-footer">
-        <button type="button" class="btn btn-default" data-dismiss="modal"><?php echo lang('CLOSE')?></button>
-    </div>
 </div>
 
 <script>
@@ -47,7 +44,7 @@ require  '../classes/messages.php';
                 { title: "Variable / Field Name" },
                 { title: "Field Label" },
                 { title: "Missing Variable" },
-                { title: "Edit" }
+                { title: "Edit (Will open a new window)" }
             ],
 
             "columnDefs": [

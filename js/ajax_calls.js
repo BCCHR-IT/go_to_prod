@@ -35,49 +35,37 @@ $( document ).ready(function() {
            $('.gp-info-content').children('.gp-body-content').hide();
 
             $('.gp-info-content').on('click', function(e) {
-                e.preventDefault();
-                var find_more=$(this).find('.title-text-plus');
-                //console.log( find_plus );
-                if (find_more.text() == '(more)')
-                    find_more.text('(less)');
-                else
-                    find_more.text('(more)');
-                $(this).children('.gp-body-content').slideToggle();
+                if (!$(e.target).is("a")) // all links will link to Hub
+                {
+                    e.preventDefault();
+                    var find_more=$(this).find('.title-text-plus');
+                    //console.log( find_plus );
+                    if (find_more.text() == '(more)')
+                        find_more.text('(less)');
+                    else
+                        find_more.text('(more)');
+                    $(this).children('.gp-body-content').slideToggle();
+                }
             });
 
-            // /*this code remove the content from the modal when is closed */
-            // $("#ResultsModal").on('hidden.bs.modal', function (e) {
-            //     e.preventDefault();
-            // });
-            //
-            // /* This code load the content of the link in the same modal */
-            // $(function() {
-            //     $('[data-load-remote]').on('click',function(e) {
-            //         e.preventDefault();
-            //         var $this = $(this);
-            //         var remote = $this.data('load-remote');
-            //         if(remote) {
-            //             $($this.data('remote-target')).load(remote);
-            //             $this.data('isloaded', true)
-            //         }
-            //     });
-            //
-            // });
+            /*this code remove the content from the modal when is closed */
+            $("#ResultsModal").on('hidden.bs.modal', function (e) {
+                e.preventDefault();
+            });
 
-
-
-                var ResultsModal =$("#ResultsModal");
-                ResultsModal.on('show.bs.modal', function (event) {
-                    var button = $(event.relatedTarget); // Button that triggered the modal
-                    var url = button.data('link'); // Extract info from data-* attributes
-                    $("#remote-html").load(url);
-                    //$('.lds-ripple').hide();
-
-
-
+            /* This code load the content of the link in the same modal */
+            $(function() {
+                $('[data-load-remote]').on('click',function(e) {
+                    e.preventDefault();
+                    var $this = $(this);
+                    var remote = $this.data('load-remote');
+                    if(remote) {
+                        $($this.data('remote-target')).load(remote);
+                        $this.data('isloaded', true)
+                    }
                 });
 
-
+            });
 
             $('#go_prod_go_btn').prop("disabled",false);
            // $('#go_prod_go_btn').html('Run again');
@@ -88,6 +76,7 @@ $( document ).ready(function() {
 
             });
 
+            $('#comments-container').show();
         }});
     });
 

@@ -262,7 +262,38 @@ public static function IsPositiveNegativeConsistent($DataDictionary) {
         $negative=self::FindProblems($negative_list);
         return array_merge($positive,$negative);
 
+}
+
+public static function EqualsValue($array, $value){
+    global $Proj;
+    $FilteredOut= array();
+    foreach ($array as $item1){
+        if (trim($item1[2]) !== $value){
+            $link_path1 = APP_PATH_WEBROOT . 'Design/online_designer.php?pid=' . $_GET['pid'] . '&page=' . $item1[0] . '&field=' . $item1[1];
+            $link_to_edit1 = '<a href=' . $link_path1 . ' target="_blank" ><img src=' . APP_PATH_IMAGES . 'pencil.png></a>';
+            
+            // Adding : Intrument Name, instrument
+            $label1=TextBreak($item1[1]);
+            array_push($FilteredOut,Array($item1[0],$item1[1],$label1,$item1[3],$link_to_edit1));
+        }
     }
 
+    return  $FilteredOut; //return just the unique values found
+}
+
+public static function IsAllYesesOneAndNosZero($DataDictionary) {
+    $yes_no_array= self::getLists($DataDictionary);
+    $all_list_questions=  self::Transform($yes_no_array);
+    $yes_words=self::getYesWords();
+    $no_words=self::getNoWords();
+
+    $yes_list= self::Filter($all_list_questions, $yes_words);
+    $no_list= self::Filter($all_list_questions, $no_words);
+
+    $yes=self::EqualsValue($yes_list, '1');
+    $no=self::EqualsValue($no_list, '0');
+
+    return array_merge($yes,$no);
+}
 
 }

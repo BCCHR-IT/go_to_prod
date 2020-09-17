@@ -7,13 +7,13 @@
  */
 
 //require_once "../../../redcap_connect.php";
- if (USERID=="alvaro1"){
+ /*if (USERID=="alvaro1"){
      exit();
- }
+ }*/
 
 /*Config Variables*/
 
-    $main_pid                        = 11078;
+    $main_pid                        = 272; //Project ID HERE
     $record_id                       = 'record_id';
     $project_id                      = 'project_id';
     $sunetid                         = 'sunetid';

@@ -1,5 +1,10 @@
 # go_to_prod
 
+# Notice
+
+This plugin is a modified version of the original go_to_prod plugin at https://github.com/aandresalvarez/go_to_prod that has been customized for BCCHR's purposes. 
+
+# Description
 
 <strong>Move to Production Check List</strong>
 
@@ -15,9 +20,6 @@ the 'Move to Production' workflow. Initial results suggest a dramatic reduction 
     <li>Inconsistencies in coding for yes/no questions.</li>
     <li>Inconsistencies in coding for positive/negative questions. </li>
     <li>No fields tagged as identifiers.</li>
-    <li>Missing PI name and last name.</li>  
-    <li>IRB Information.</li> 
-    <li>Purpose of the project.</li> 
     <li>Date format inconsistencies.</li> 
     <li>Branching logic inconsistencies.</li> 
     <li>Inconsistencies in calculated fields.</li> 
@@ -29,17 +31,14 @@ the 'Move to Production' workflow. Initial results suggest a dramatic reduction 
     <li>Calculations using "Today".</li> 
     <li>The project is sufficiently tested (at least three test records and 1 data export).</li> 
     <li>Inconsistencies in ASI Logic.</li> 
+    <li>Checking whether ASIs have been tested (at least one email sent for each ASI).
+    <li>Whether email field has been configured for ASI</li>
     <li>Inconsistencies in Data Quality Module Logic.</li> 
     <li>Inconsistencies in Advanced Reports Logic.</li> 
 </ol>
 
-# See in action 
-[![IMAGE ALT TEXT HERE](/gotoprod.gif?raw=true "Check list Example")](https://youtu.be/zsoDnBT21jA)
-https://youtu.be/zsoDnBT21jA 
-
 ## Installation instructions:
 <ol>
-    <li>Go to GitHub https://github.com/aandresalvarez/go_to_prod. </li>
     <li>Clone or download repository (Green button) </li>
     <li>Paste the unzipped folder in your /redcap/plugins/ folder.  </li>
     <li>Now your folder looks like this: /redcap/plugins/go_to_prod-master.</li>

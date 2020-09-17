@@ -91,31 +91,15 @@ class check_presence_of_branching_and_calculated_variables
         return $var;
     }
 
-    public static function ExtractQueueLogic(){ //TODO: for some reason in some projects the query returns an extra logic variable that does not exist and is created by REDCap.. (partially fixed). Update: looks like REDCap is not deleting (removing) the queue logic when is deactivated  in the survey_queue_setup.php (send Ticket to consortium)
+    public static function ExtractQueueLogic(){ //TODO: for some reason in some projects the query returns an extra logic variable that does not exist and is created by REDCap.. (partiali fixed).
 
         $var=Array();
-       /* $sql = "SELECT
+        $sql = "SELECT 
 	              SRV.form_name as form,  RSQ.event_id as event_id, RSQ.condition_logic as logic 
                 FROM 
 	              redcap_surveys as SRV, redcap_surveys_queue as RSQ 
                 WHERE
-	               RSQ.condition_logic IS NOT NULL and RSQ.active=1 and SRV.survey_id=RSQ.survey_id and SRV.project_id=".$_GET['pid'];*/
-        $sql = "SELECT
-                      rs.form_name as form,  rsq.event_id as event_id, rsq.condition_logic as logic 
-                    FROM
-                      redcap_surveys_queue rsq
-                      join redcap_surveys rs on rsq.survey_id = rs.survey_id
-                    WHERE
-                       rsq.active=1
-                      AND rs.form_name in (
-                        SELECT
-                          DISTINCT rm.form_name
-                        FROM
-                          redcap_metadata rm
-                        WHERE
-                          rm.project_id = rs.project_id
-                      ) and rs.project_id =".$_GET['pid'];
-
+	               RSQ.condition_logic IS NOT NULL and RSQ.active=1 and SRV.survey_id=RSQ.survey_id and SRV.project_id=".$_GET['pid'];
         $result = db_query( $sql );
         while ( $query_res = db_fetch_assoc( $result ) )
         {
@@ -260,12 +244,8 @@ class check_presence_of_branching_and_calculated_variables
 
          $fields= self::AddCheckBoxes($fields);//adding the extra Checkbox variables
         foreach ($BranchingLogicArray as $variable){
-             if(!in_array($variable[2],$fields)){
-
-
-
+             if(!in_array(strtolower($variable[2]),$fields)){
                  $label=TextBreak($variable[1]);
-
 
                  $link_path=APP_PATH_WEBROOT.'Design/online_designer.php?pid='.$_GET['pid'].'&page='.$variable[0].'&field='.$variable[1].'&branching=1';
                  $link_to_edit='<a href='.$link_path.' target="_blank" ><img src='.APP_PATH_IMAGES.'arrow_branch_side.png></a>';
@@ -292,7 +272,7 @@ class check_presence_of_branching_and_calculated_variables
         $fields = REDCap::getFieldNames();
         $fields= self::AddCheckBoxes($fields);//adding the extra Checkbox variables
         foreach ($calculated_fields_array as $variable){
-            if(!in_array($variable[2],$fields)){
+            if(!in_array(strtolower($variable[2]),$fields)){
                 $label=TextBreak($variable[1]);
                 $link_path=APP_PATH_WEBROOT.'Design/online_designer.php?pid='.$_GET['pid'].'&page='.$variable[0].'&field='.$variable[1];
                 $link_to_edit='<a href='.$link_path.' target="_blank" ><img src='.APP_PATH_IMAGES.'pencil.png></a>';
@@ -324,7 +304,7 @@ class check_presence_of_branching_and_calculated_variables
         $fields = REDCap::getFieldNames();
         $fields= self::AddCheckBoxes($fields);//adding the extra Checkbox variables
         foreach ($logic_fields_array as $variable){
-            if(!in_array($variable[2],$fields)){
+            if(!in_array(strtolower($variable[2]),$fields)){
                 $event= REDCap::getEventNames(false,true, $variable[1]);
                 if (!$event) {$event='-';}
                 $link_path=APP_PATH_WEBROOT.'Design/online_designer.php?pid='.$_GET['pid'];
@@ -343,7 +323,7 @@ class check_presence_of_branching_and_calculated_variables
         $fields = REDCap::getFieldNames();
         $fields= self::AddCheckBoxes($fields);//adding the extra Checkbox variables
         foreach ($logic_fields_array as $variable){
-            if(!in_array($variable[2],$fields)){
+            if(!in_array(strtolower($variable[2]),$fields)){
                 $event= REDCap::getEventNames(false,true, $variable[1]);
                 if (!$event) {$event='-';}
                 $link_path=APP_PATH_WEBROOT.'Design/online_designer.php?pid='.$_GET['pid'];
@@ -362,7 +342,7 @@ class check_presence_of_branching_and_calculated_variables
         $fields = REDCap::getFieldNames();
         $fields= self::AddCheckBoxes($fields);//adding the extra Checkbox variables
         foreach ($logic_fields_array as $variable){
-            if(!in_array($variable[2],$fields)){
+            if(!in_array(strtolower($variable[2]),$fields)){
                 $link_path=APP_PATH_WEBROOT.'DataQuality/index.php?pid='.$_GET['pid'];
                 $link_to_edit='<a href='.$link_path.' target="_blank" ><img src='.APP_PATH_IMAGES.'pencil.png></a>';
                 array_push( $var, Array($variable[0],$variable[1],'<strong style="color: red">['.$variable[2].']</strong>',$link_to_edit));
@@ -379,12 +359,72 @@ class check_presence_of_branching_and_calculated_variables
         $fields = REDCap::getFieldNames();
         $fields= self::AddCheckBoxes($fields);//adding the extra Checkbox variables
         foreach ($logic_fields_array as $variable){
-            if(!in_array($variable[2],$fields)){
+            if(!in_array(strtolower($variable[2]),$fields)){
                 $link_path=APP_PATH_WEBROOT.'DataExport/index.php?pid='.$_GET['pid'].'&report_id='.$variable[1].'&addedit=1';
                 $link_to_edit='<a href='.$link_path.' target="_blank" ><img src='.APP_PATH_IMAGES.'pencil.png></a>';
                 array_push( $var, Array($variable[0],$variable[1],'<strong style="color: red">['.$variable[2].']</strong>',$link_to_edit));
             }
         }
         return $var;
+    }
+
+    public static function IsASIEnabled() {
+        $asi_enabled = 0;
+        $query = 'SELECT count(*) as count FROM redcap_surveys_scheduler scheduler left join redcap_surveys surveys on  surveys.survey_id = scheduler.survey_id where project_id = ' . $_GET['pid'];
+        $result = db_query($query);
+        while ($row = db_fetch_assoc($result)) {
+            $asi_enabled = $row["count"];
+        }
+        return $asi_enabled;
+    }
+
+    public static function CheckEmailField() 
+    {
+        if (!empty(self::IsASIEnabled())) {
+            $survey_email_field_set = false;
+            $query = "select survey_email_participant_field from redcap_projects where project_id = " . $_GET["pid"];
+            $result = db_query($query);
+            while ($row = db_fetch_assoc($result)) {
+                if (!empty($row["survey_email_participant_field"])) {
+                    $survey_email_field_set = true;
+                }
+            }
+            return $survey_email_field_set;
+        }
+        else return true;
+    }
+
+    public static function CheckIfASITested() 
+    {
+        $array = array();
+        $asi_count = self::IsASIEnabled();
+        if (!empty($asi_count)) {
+            $query = "SELECT count(distinct surveys_emails.survey_id) as count FROM redcap_surveys_emails surveys_emails left join redcap_surveys surveys on surveys.survey_id = surveys_emails.survey_id where surveys.project_id = " . $_GET["pid"];
+            $result = db_query($query);
+            while ($row = db_fetch_assoc($result)) {
+                if ($row["count"] < $asi_count) {
+                    $array = Array($row["count"], $asi_count);
+                }
+            }
+        }
+        return $array;
+    }
+
+    public static function CheckIfInstrumentsDesignatedAsSurveys()
+    {
+        $query = "SELECT surveys_enabled from redcap_projects where project_id = " . $_GET["pid"];
+        $result = db_query($query);
+        $row = db_fetch_assoc($result);
+        if ($row["surveys_enabled"] == 1)
+        {
+            $query = "SELECT count(*) as count FROM redcap_projects projects inner join redcap_surveys as surveys on surveys.project_id = projects.project_id where projects.surveys_enabled = 1 and projects.project_id = " . $_GET["pid"];
+            $result = db_query($query);
+            while ($row = db_fetch_assoc($result)) {
+                if ($row["count"] == 0) {
+                    return false;
+                }
+            }
+        }
+        return true;
     }
 }
