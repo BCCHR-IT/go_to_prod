@@ -118,25 +118,24 @@ if($status != 1 or $_SESSION["IsJustForFun"]!=true){ //USERID == 'alvaro1' and
 ?>
     <div id='final-info' style="display: none">
         <br>
+        <div class="col-md-12 col-sm-6 col-xs-12 col-lg-12 text-center well" >
+            <h4>
+                <?php echo lang('I_AGREE_BODY');?>
+            </h4> <br><button data-toggle="modal" data-target="#i-agree-modal" id="go_prod_accept_all" class=" btn btn-md btn-success text-center "> <?php echo lang('I_AGREE');?> </button>
+        </div>
         <h4 class="projhdr"><?php echo lang('NOTICE');?></h4>
-    <hr>
-    <div class="row" style="margin-bottom:20px">
-        <div class="notice-group col-md-6 col-sm-6">
-            <h4><?php echo lang('INFO_WHAT_NETX');?></h4>
-            <p><?php echo lang('INFO_WHAT_NETX_BODY');?></p>
-            <p><?php echo lang('INFO_WHAT_NETX_BODY_2');?></p>
+        <hr>
+        <div class="row" style="margin-bottom:20px">
+            <div class="notice-group col-md-6 col-sm-6">
+                <h4><?php echo lang('INFO_WHAT_NETX');?></h4>
+                <p><?php echo lang('INFO_WHAT_NETX_BODY');?></p>
+                <p><?php echo lang('INFO_WHAT_NETX_BODY_2');?></p>
+            </div>
+            <div class="notice-group col-md-6 col-sm-6">
+                <h4><?php echo lang('INFO_CITATION');?></h4>
+                <p><?php echo lang('INFO_CITATION_BODY');?>  </p>
+            </div>
         </div>
-        <div class="notice-group col-md-6 col-sm-6">
-            <h4><?php echo lang('INFO_CITATION');?></h4>
-            <p><?php echo lang('INFO_CITATION_BODY');?>  </p>
-        </div>
-    </div>
-
-    <div class="col-md-12 col-sm-6 col-xs-12 col-lg-12 text-center well" >
-        <h4>
-            <?php echo lang('I_AGREE_BODY');?>
-        </h4> <br><button data-toggle="modal" data-target="#i-agree-modal" id="go_prod_accept_all" class=" btn btn-md btn-success text-center "> <?php echo lang('I_AGREE');?> </button>
-    </div>
     </div>
 
     <div id="i-agree-modal" class="modal fade">
