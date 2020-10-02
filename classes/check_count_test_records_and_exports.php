@@ -48,7 +48,7 @@ class check_count_test_records_and_exports
         $count_records=0;
         $count_exports=0;
         $total= Array();
-        $log_event_table = method_exists('\REDCap', 'getLogEventTable') ? REDCap::getLogEventTable($this->pid) : "redcap_log_event";
+        $log_event_table = method_exists('\REDCap', 'getLogEventTable') ? REDCap::getLogEventTable($_GET['pid']) : "redcap_log_event";
         $sql = "SELECT description FROM $log_event_table where project_id=".$_GET['pid'];
         $result = db_query( $sql );
         while ( $result1 = db_fetch_assoc( $result ) )
