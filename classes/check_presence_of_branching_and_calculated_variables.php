@@ -7,7 +7,6 @@
  * Time: 11:38 AM
  */
 
-
 include_once 'utilities.php';
 
 class check_presence_of_branching_and_calculated_variables
@@ -94,12 +93,10 @@ class check_presence_of_branching_and_calculated_variables
     public static function ExtractQueueLogic(){ //TODO: for some reason in some projects the query returns an extra logic variable that does not exist and is created by REDCap.. (partiali fixed).
 
         $var=Array();
-        $sql = "SELECT 
-	              SRV.form_name as form,  RSQ.event_id as event_id, RSQ.condition_logic as logic 
-                FROM 
-	              redcap_surveys as SRV, redcap_surveys_queue as RSQ 
-                WHERE
-	               RSQ.condition_logic IS NOT NULL and RSQ.active=1 and SRV.survey_id=RSQ.survey_id and SRV.project_id=".$_GET['pid'];
+        // BCCHR developer comment: Changed the SQL query to have tighter checking for the survey queue, in regards to old survey queue logic existing in the DB for some reason.
+        $sql = "SELECT distinct s.form_name as form, q.event_id as event_id, q.condition_logic as logic 
+                from redcap_surveys_queue q, redcap_surveys s, redcap_metadata m, redcap_events_metadata e, redcap_events_arms a 
+                where q.condition_logic is not null and s.survey_id = q.survey_id and m.project_id = s.project_id and s.form_name = m.form_name and q.event_id = e.event_id and e.arm_id = a.arm_id and s.survey_enabled = 1 and s.project_id = " . $_GET['pid'];
         $result = db_query( $sql );
         while ( $query_res = db_fetch_assoc( $result ) )
         {
