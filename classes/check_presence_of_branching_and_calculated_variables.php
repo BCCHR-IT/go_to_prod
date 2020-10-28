@@ -90,19 +90,32 @@ class check_presence_of_branching_and_calculated_variables
         return $var;
     }
 
-    public static function ExtractQueueLogic(){ //TODO: for some reason in some projects the query returns an extra logic variable that does not exist and is created by REDCap.. (partiali fixed).
+    public static function ExtractQueueLogic() { 
+        // Return the complete Survey Queue prescription for this project
+        $Proj = new Project();
+        
+        $project_queue = array();
+        
+		$sql = "select distinct q.* from redcap_surveys_queue q, redcap_surveys s, redcap_metadata m, redcap_events_metadata e,
+				redcap_events_arms a where s.survey_id = q.survey_id and s.project_id = ". $_GET['pid'] ." and m.project_id = s.project_id
+                and s.form_name = m.form_name and q.event_id = e.event_id and e.arm_id = a.arm_id and s.survey_enabled = 1  and q.active = 1";
+                
+        $q = db_query($sql);
+        
+		if (db_num_rows($q) > 0) {
+			while ($row = db_fetch_assoc($q)) {
+				$survey_id = $row['survey_id'];
+				$event_id = $row['event_id'];
+                $form = $Proj->surveys[$survey_id]['form_name'];
+                
+                if (!in_array($form, $Proj->eventsForms[$event_id])) 
+                    continue;
 
-        $var=Array();
-        // BCCHR developer comment: Changed the SQL query to have tighter checking for the survey queue, in regards to old survey queue logic existing in the DB for some reason.
-        $sql = "SELECT distinct s.form_name as form, q.event_id as event_id, q.condition_logic as logic 
-                from redcap_surveys_queue q, redcap_surveys s, redcap_metadata m, redcap_events_metadata e, redcap_events_arms a 
-                where q.condition_logic is not null and s.survey_id = q.survey_id and m.project_id = s.project_id and s.form_name = m.form_name and q.event_id = e.event_id and e.arm_id = a.arm_id and s.survey_enabled = 1 and s.project_id = " . $_GET['pid'];
-        $result = db_query( $sql );
-        while ( $query_res = db_fetch_assoc( $result ) )
-        {
-            array_push($var, Array($query_res[form],$query_res[event_id],$query_res[logic]));
+				array_push($project_queue, Array($form, $event_id, $row["condition_logic"]));
+			}
         }
-        return $var;
+        
+		return $project_queue;
     }
 
     public static function ExtractDataQualityLogic(){
