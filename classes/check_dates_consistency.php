@@ -47,9 +47,6 @@ class check_dates_consistency
      * @param $array
      * @return array
      */
-
-    // At this point is just showing  two date fields with differetn data format
-    //TODO: Maybe show all the data fields so maybe easier to update all
     public static function FindDateConsistencyProblems($array){
         global $Proj;
         $FilteredOut= array();
@@ -76,16 +73,9 @@ class check_dates_consistency
                 }
 
             }
-            if (!empty($FilteredOut)){
-
-                break;
-            }
-
-
-
         }
 
-        return  array_map("unserialize", array_unique(array_map("serialize", $FilteredOut))); //return just the unique values found
+        return  array_values(array_map("unserialize", array_unique(array_map("serialize", $FilteredOut)))); // Return just the unique values found. Use array_values, otherwise an associative array with the indexes as keys will be returned.
     }
 
     /**
