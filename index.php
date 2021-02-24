@@ -176,10 +176,12 @@ if($status != 1 or $_SESSION["IsJustForFun"]!=true){ //USERID == 'alvaro1' and
                     pid: project_id,
                     table_contents: $('table').prop('outerHTML'),
                     comments: $('textarea').val()
+                },
+                success: function () {
+                    production = <?php  echo json_encode(APP_PATH_WEBROOT.'ProjectSetup/index.php?pid='.$_GET['pid'].'&to_prod_plugin=1')?>;
+                    location.href = production;
                 }
             });
-            production = <?php  echo json_encode(APP_PATH_WEBROOT.'ProjectSetup/index.php?pid='.$_GET['pid'].'&to_prod_plugin=1')?>;
-            location.href = production;
         };
     </script>
 <?php

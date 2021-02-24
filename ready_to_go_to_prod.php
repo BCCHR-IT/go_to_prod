@@ -55,7 +55,7 @@ if (!empty($results))
     $upload_success = file_put_contents(EDOC_PATH . $stored_name, $pdf_content);
     $err_msg = "";
 
-    if ($upload_success !== FALSE) 
+    if ($upload_success !== FALSE && $conn) 
     {
         $dummy_file_size = $upload_success;
         $dummy_file_type = "application/$file_extension";
@@ -66,20 +66,20 @@ if (!empty($results))
                 VALUES ($pid,CURRENT_DATE,'$dummy_file_name.$file_extension','$dummy_file_size','$dummy_file_type',
                 \"$file_repo_name - $filename (" . USERID . ")\",NULL)";
                         
-        if (db_query($sql)) 
+        if (mysqli_query($conn, $sql)) 
         {
-            $docs_id = db_insert_id();
+            $docs_id = mysqli_insert_id($conn);
 
             $sql = "INSERT INTO redcap_edocs_metadata (stored_name,mime_type,doc_name,doc_size,file_extension,project_id,stored_date)
                     VALUES('".$stored_name."','".$dummy_file_type."','".$dummy_file_name."','".$dummy_file_size."',
                     '".$file_extension."','".$pid."','".date('Y-m-d H:i:s')."');";
                         
-            if (db_query($sql)) 
+            if (mysqli_query($conn, $sql)) 
             {
-                $doc_id = db_insert_id();
+                $doc_id = mysqli_insert_id($conn);
                 $sql = "INSERT INTO redcap_docs_to_edocs (docs_id,doc_id) VALUES ('".$docs_id."','".$doc_id."');";
                             
-                if (db_query($sql)) 
+                if (mysqli_query($conn, $sql)) 
                 {
                     // Logging
                     $database_success = TRUE;
@@ -87,8 +87,8 @@ if (!empty($results))
                 else 
                 {
                     /* if this failed, we need to roll back redcap_edocs_metadata and redcap_docs */
-                    db_query("DELETE FROM redcap_edocs_metadata WHERE doc_id='".$doc_id."';");
-                    db_query("DELETE FROM redcap_docs WHERE docs_id='".$docs_id."';");
+                    mysqli_query($conn, "DELETE FROM redcap_edocs_metadata WHERE doc_id='".$doc_id."';");
+                    mysqli_query($conn, "DELETE FROM redcap_docs WHERE docs_id='".$docs_id."';");
                     deleteRepositoryFile($stored_name);
                     $err_msg = "Unable to save file metadata to redcap_docs_to_edocs.";
                 }
@@ -96,7 +96,7 @@ if (!empty($results))
             else
             {
                 /* if we failed here, we need to roll back redcap_docs */
-                db_query("DELETE FROM redcap_docs WHERE docs_id='".$docs_id."';");
+                mysqli_query($conn, "DELETE FROM redcap_docs WHERE docs_id='".$docs_id."';");
                 deleteRepositoryFile($stored_name);
                 $err_msg = "Unable to save file metadata to redcap_edocs_metadata.";
             }
